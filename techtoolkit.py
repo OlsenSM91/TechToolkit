@@ -58,33 +58,36 @@ class MyApp(QMainWindow):
 
     def add_to_console(self, text, color=None):
         self.console.moveCursor(QTextCursor.End)
-        if color:
-            self.console.setTextColor(QColor(color))
         for line in text.splitlines():
+            line_color = color
+            if line_color is None:
+                for pattern, pattern_color in self.config['Patterns'].items():
+                    if re.search(pattern, line):
+                        line_color = pattern_color
+                        break
+            if line_color:
+                self.console.setTextColor(QColor(line_color))
             self.console.append(line)
-            for pattern, color in self.config['Patterns'].items():
-                if re.search(pattern, line):
-                    self.console.setTextColor(QColor(color))
-                    self.console.append(line)
-        self.console.setTextColor(QColor('black'))
+            self.console.setTextColor(QColor('black'))
 
     def send_log_to_discord(self):
         # Get all the text from the console
         log = self.console.toPlainText()
 
-        # Create the message with ``` at the beginning and end
-        message = '```\n' + log + '\n```'
+        # Save the log to a text file
+        with open('log.txt', 'w') as f:
+            f.write(log)
 
         # Define the webhook URL from the config file
         webhook_url = self.config['Discord']['WebhookURL']
 
         # Create the data to send
         data = {
-            'content': message
+            'content': 'Log file from TechToolkit'
         }
 
-        # Send the data to the webhook
-        result = requests.post(webhook_url, data=json.dumps(data), headers={"Content-Type": "application/json"})
+        # Send the log file to the webhook
+        result = requests.post(webhook_url, data=data, files={'file': open('log.txt', 'rb')})
 
         # If the post request was not successful, print the error
         if result.status_code != 204:
