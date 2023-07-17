@@ -15,11 +15,12 @@ class MyApp(QMainWindow):
         super().__init__()
         self.config = configparser.ConfigParser()
         self.config.read('config.ini')
+        self.script_dir = os.path.dirname(os.path.realpath(__file__))
         self.init_ui()
 
     def init_ui(self):
         self.setWindowTitle(self.config['App']['Title'])
-        self.setGeometry(300, 300, 300, 200)
+        self.setGeometry(300, 150, 500, 800)
 
         widget = QWidget()
         self.setCentralWidget(widget)
@@ -39,6 +40,11 @@ class MyApp(QMainWindow):
         button.clicked.connect(self.send_log_to_discord)
         layout.addWidget(button)
 
+        # Clear Console Log button
+        clear_button = QPushButton('Clear Log')
+        clear_button.clicked.connect(self.clear_console)
+        layout.addWidget(clear_button)
+
     def add_menu(self):
         menu = self.menuBar()
         for section in self.config.sections():
@@ -50,11 +56,50 @@ class MyApp(QMainWindow):
                     menu_section.addAction(action)
 
     def run_command(self, command):
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if "powershell.exe" in command:
+            # Extract the relative path from the command string
+            relative_path = re.search(r'-File ./?(.*?)$', command).group(1)
+
+            # Generate the absolute path to the file
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            absolute_path = os.path.join(base_dir, relative_path)
+
+            # Print for debugging
+            print(f"base_dir = {base_dir}")
+            print(f"relative_path = {relative_path}")
+            print(f"absolute_path = {absolute_path}")
+
+            # Replace the relative path in the command string with the absolute path
+            command = command.replace('./' + relative_path, absolute_path)
+
+            # Print the final command for debugging
+            print(f"final command = {command}")
+
+        elif "./" in command:
+            # Extract the relative path from the command string
+            relative_path = re.search(r'\./?(.*?)$', command).group(1)
+
+            # Generate the absolute path to the file
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            absolute_path = os.path.join(base_dir, relative_path)
+
+            # Print for debugging
+            print(f"base_dir = {base_dir}")
+            print(f"relative_path = {relative_path}")
+            print(f"absolute_path = {absolute_path}")
+
+            # Replace the relative path in the command string with the absolute path
+            command = command.replace('./' + relative_path, absolute_path)
+
+            # Print the final command for debugging
+            print(f"final command = {command}")
+
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         output, error = process.communicate()
         self.add_to_console(output.decode('utf-8'))
         if error:
             self.add_to_console(error.decode('utf-8'), 'red')
+
 
     def add_to_console(self, text, color=None):
         self.console.moveCursor(QTextCursor.End)
@@ -69,6 +114,9 @@ class MyApp(QMainWindow):
                 self.console.setTextColor(QColor(line_color))
             self.console.append(line)
             self.console.setTextColor(QColor('black'))
+
+    def clear_console(self):
+        self.console.clear()
 
     def send_log_to_discord(self):
         # Get all the text from the console
